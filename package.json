@@ -1,20 +1,15 @@
 {
-  "name": "react-error-overlay",
-  "version": "4.0.0",
-  "description": "An overlay for displaying stack frames.",
+  "name": "javascript-error-overlay",
+  "version": "1.0.0",
+  "description": "An overlay for displaying javascript errors.",
   "main": "lib/index.js",
   "scripts": {
-    "prepublishOnly": "npm run build:prod && npm test",
     "start": "cross-env NODE_ENV=development node build.js --watch",
     "test": "cross-env NODE_ENV=test jest",
     "build": "cross-env NODE_ENV=development node build.js",
     "build:prod": "cross-env NODE_ENV=production node build.js"
   },
-  "repository": "facebook/create-react-app",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
-  },
   "keywords": [
     "overlay",
     "syntax",
@@ -24,10 +19,6 @@
     "redbox",
     "crash",
     "warning"
-  ],
-  "author": "Joe Haddad <timer150@gmail.com>",
-  "files": [
-    "lib/index.js"
   ],
   "devDependencies": {
     "@babel/code-frame": "7.0.0-beta.46",
