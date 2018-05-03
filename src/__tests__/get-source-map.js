@@ -27,6 +27,19 @@ test('finds an external source map', async () => {
   });
 });
 
+test('finds an external source map a page relative path', async () => {
+  const file = fs
+    .readFileSync(resolve(__dirname, '../../fixtures/bundle2.mjs'))
+  fetch.mockResponseOnce(
+    fs
+      .readFileSync(resolve(__dirname, '../../fixtures/bundle.mjs.map'))
+      .toString('utf8')
+  );
+  const sm = await getSourceMap('/', file);
+  expect(fetch.mock.calls.length).toEqual(1);
+  expect(fetch.mock.calls[0][0]).toEqual('/static/js/bundle2.js.map');
+});
+
 test('find an inline source map', async () => {
   const sourceName = 'test.js';
 

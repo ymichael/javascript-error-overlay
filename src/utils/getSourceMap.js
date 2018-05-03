@@ -116,6 +116,9 @@ async function getSourceMap(
     sm = window.atob(sm);
     sm = JSON.parse(sm);
     return new SourceMap(new SourceMapConsumer(sm));
+  } else if (sm.startsWith('/')) {
+    const obj = await fetch(sm).then(res => res.json());
+    return new SourceMap(new SourceMapConsumer(obj));
   } else {
     const index = fileUri.lastIndexOf('/');
     const url = fileUri.substring(0, index + 1) + sm;
