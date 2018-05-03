@@ -57,6 +57,7 @@
     "setupFiles": [
       "./src/__tests__/setupJest.js"
     ],
+    "setupTestFrameworkScriptFile": "./src/__tests__/setupJestScript.js",
     "collectCoverage": true,
     "coverageReporters": [
       "json"
@@ -68,7 +69,8 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/fixtures/",
-      "setupJest.js"
+      "setupJest.js",
+      "setupJestScript.js"
     ]
   }
 }
