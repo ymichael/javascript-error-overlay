@@ -59,4 +59,4 @@ document.body.style['max-width'] = '100vw';
 iframeRoot = document.createElement('div');
 applyStyles(iframeRoot, overlayStyle);
 document.body.appendChild(iframeRoot);
-window.parent.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady();
+window.parent.__JAVASCRIPT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady();

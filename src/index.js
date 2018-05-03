@@ -160,9 +160,8 @@ function updateIframeContent() {
   }
 }
 
-window.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__ =
-  window.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__ || {};
-window.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady = function iframeReady() {
+window.__JAVASCRIPT_ERROR_OVERLAY_GLOBAL_HOOK__ = window.__JAVASCRIPT_ERROR_OVERLAY_GLOBAL_HOOK__ || {};
+window.__JAVASCRIPT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady = function iframeReady() {
   isIframeReady = true;
   isLoadingIframe = false;
   updateIframeContent();
@@ -170,7 +169,7 @@ window.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady = function iframeReady() 
 
 if (process.env.NODE_ENV === 'production') {
   console.warn(
-    'react-error-overlay is not meant for use in production. You should ' +
+    'javascript-error-overlay is not meant for use in production. You should ' +
       'ensure it is not included in your build to reduce bundle size.'
   );
 }
