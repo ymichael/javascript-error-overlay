@@ -20,10 +20,7 @@ import {
 } from './effects/stackTraceLimit';
 import {
   permanentRegister as permanentRegisterConsole,
-  registerReactStack,
-  unregisterReactStack,
 } from './effects/proxyConsole';
-import { massage as massageWarning } from './utils/warnings';
 import getStackFrames from './utils/getStackFrames';
 
 import type { StackFrame } from './utils/stack-frame';
@@ -61,24 +58,18 @@ export function listenToRuntimeErrors(
   registerError(window, error => crashWithFrames(error, false));
   registerPromise(window, error => crashWithFrames(error, true));
   registerStackTraceLimit();
-  registerReactStack();
-  permanentRegisterConsole('error', (warning, stack) => {
-    const data = massageWarning(warning, stack);
-    crashWithFrames(
-      // $FlowFixMe
-      {
-        message: data.message,
-        stack: data.stack,
-        __unmap_source: filename,
-      },
-      false
-    );
+  permanentRegisterConsole('error', (...args) => {
+    if (args.length === 1 && args[0] instanceof Error) {
+      crashWithFrames(args[0], false);
+      return;
+    }
+    // TODO: Unhandled console.error.
+    console.warn('TODO: Unhandled console.error');
   });
 
   return function stopListening() {
     unregisterStackTraceLimit();
     unregisterPromise(window);
     unregisterError(window);
-    unregisterReactStack();
   };
 }

@@ -9,7 +9,6 @@
 import type { StackFrame } from './stack-frame';
 import { parse } from './parser';
 import { map } from './mapper';
-import { unmap } from './unmapper';
 
 function getStackFrames(
   error: Error,
@@ -17,17 +16,7 @@ function getStackFrames(
   contextSize: number = 3
 ): Promise<StackFrame[] | null> {
   const parsedFrames = parse(error);
-  let enhancedFramesPromise;
-  if (error.__unmap_source) {
-    enhancedFramesPromise = unmap(
-      // $FlowFixMe
-      error.__unmap_source,
-      parsedFrames,
-      contextSize
-    );
-  } else {
-    enhancedFramesPromise = map(parsedFrames, contextSize);
-  }
+  const enhancedFramesPromise = map(parsedFrames, contextSize);
   return enhancedFramesPromise.then(enhancedFrames => {
     if (
       enhancedFrames
