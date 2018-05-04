@@ -37,10 +37,7 @@ export type ErrorRecord = {|
   stackFrames: StackFrame[],
 |};
 
-export function listenToRuntimeErrors(
-  crash: ErrorRecord => void,
-  filename: string = '/static/js/bundle.js'
-) {
+export function listenToRuntimeErrors(crash: ErrorRecord => void) {
   function crashWithFrames(error: Error, unhandledRejection = false) {
     const _crashInner = function(stackFrames) {
       if (stackFrames == null) {

@@ -20,7 +20,6 @@ import type { ErrorLocation } from './utils/parseCompileError';
 
 type RuntimeReportingOptions = {|
   onError: () => void,
-  filename?: string,
 |};
 
 type EditorHandler = (errorLoc: ErrorLocation) => void;
@@ -56,6 +55,7 @@ export function startReportingRuntimeErrors(options: RuntimeReportingOptions) {
   if (stopListeningToRuntimeErrors !== null) {
     throw new Error('Already listening');
   }
+  options = options || {};
   if (options.launchEditorEndpoint) {
     console.warn(
       'Warning: `startReportingRuntimeErrors` doesn’t accept ' +
@@ -72,7 +72,7 @@ export function startReportingRuntimeErrors(options: RuntimeReportingOptions) {
     } finally {
       handleRuntimeError(errorRecord);
     }
-  }, options.filename);
+  });
 }
 
 function handleRuntimeError(errorRecord) {
