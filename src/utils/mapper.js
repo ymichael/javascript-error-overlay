@@ -7,7 +7,7 @@
 
 /* @flow */
 import StackFrame from './stack-frame';
-import { getSourceMap } from './getSourceMap';
+import { cachedFetch as fetch, cachedGetSourceMap as getSourceMap } from './cachedHelpers';
 import { getLinesAround } from './getLinesAround';
 import { settle } from 'settle-promise';
 

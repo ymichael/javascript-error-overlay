@@ -7,6 +7,7 @@
 
 /* @flow */
 import { SourceMapConsumer } from 'source-map';
+import { cachedFetch as fetch } from './cachedHelpers';
 
 /**
  * A wrapped instance of a <code>{@link https://github.com/mozilla/source-map SourceMapConsumer}</code>.

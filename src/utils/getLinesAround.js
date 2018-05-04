@@ -7,6 +7,7 @@
 
 /* @flow */
 import { ScriptLine } from './stack-frame';
+import { cachedSplitLines as splitLines } from './cachedHelpers';
 
 /**
  *
@@ -20,7 +21,7 @@ function getLinesAround(
   lines: string[] | string
 ): ScriptLine[] {
   if (typeof lines === 'string') {
-    lines = lines.split('\n');
+    lines = splitLines(lines);
   }
   const result = [];
   for (
