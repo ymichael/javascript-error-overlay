@@ -16,8 +16,14 @@ const permanentRegister = function proxyConsole(
     const orig = console[type];
     if (typeof orig === 'function') {
       console[type] = function __stack_frame_overlay_proxy_console__(...args) {
+        let err;
+        if (args.length === 1 && args[0] instanceof Error) {
+          err = args[0];
+        } else {
+          err = new Error(args);
+        }
         try {
-          callback.apply(null, args);
+          callback.call(null, err);
         } catch (err) {
           // Warnings must never crash. Rethrow with a clean stack.
           setTimeout(function() {

@@ -67,13 +67,8 @@ export function listenToRuntimeErrors(crash: ErrorRecord => void) {
   registerError(window, error => crashWithFrames(error, false));
   registerPromise(window, error => crashWithFrames(error, true));
   registerStackTraceLimit();
-  permanentRegisterConsole('error', (...args) => {
-    if (args.length === 1 && args[0] instanceof Error) {
-      crashWithFrames(args[0], false);
-      return;
-    }
-    // TODO: Unhandled console.error.
-    console.warn('TODO: Unhandled console.error');
+  permanentRegisterConsole('error', (err) => {
+      crashWithFrames(err, false);
   });
 
   return function stopListening() {
