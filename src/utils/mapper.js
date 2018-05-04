@@ -24,7 +24,7 @@ async function map(
   const files: string[] = [];
   frames.forEach(frame => {
     const { fileName } = frame;
-    if (fileName == null) {
+    if (fileName == null || fileName == window.location.href) {
       return;
     }
     if (files.indexOf(fileName) !== -1) {
