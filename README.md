@@ -2,6 +2,14 @@
 
 A generic overlay that displays JavaScript errors on the page - heavily adapted/forked from [facebook/create-react-app](https://github.com/facebook/create-react-app)'s [react-error-overlay`](https://github.com/facebook/create-react-app/tree/next/packages/react-error-overlay).
 
+## Usage
+
+Include the script in your app and start listening for errors!
+
+```
+var errorOverlay = require('javascript-error-overlay');
+errorOverlay.startReportingRuntimeErrors();
+```
 
 ## Development
 
