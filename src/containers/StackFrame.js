@@ -113,7 +113,7 @@ class StackFrame extends Component<Props, State> {
     } = frame;
     const functionName = frame.getFunctionName();
 
-    const compiled = this.state.compiled;
+    const compiled = this.state.compiled || !sourceLines;
     const url = getPrettyURL(
       sourceFileName,
       sourceLineNumber,

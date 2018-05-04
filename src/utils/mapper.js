@@ -18,7 +18,8 @@ import { settle } from 'settle-promise';
  */
 async function map(
   frames: StackFrame[],
-  contextLines: number = 3
+  contextLines: number = 3,
+  skipSourceMap: boolean = false,
 ): Promise<StackFrame[]> {
   const cache: any = {};
   const files: string[] = [];
@@ -35,15 +36,23 @@ async function map(
   await settle(
     files.map(async fileName => {
       const fileSource = await fetch(fileName).then(r => r.text());
-      const map = await getSourceMap(fileName, fileSource);
+      const map = skipSourceMap ? null : await getSourceMap(fileName, fileSource);
       cache[fileName] = { fileSource, map };
     })
   );
   return frames.map(frame => {
     const { functionName, fileName, lineNumber, columnNumber } = frame;
     let { map, fileSource } = cache[fileName] || {};
+    const scriptCode = fileSource ?
+      getLinesAround(lineNumber, contextLines, fileSource) : null;
     if (map == null || lineNumber == null) {
-      return frame;
+      return new StackFrame(
+        functionName,
+        fileName,
+        lineNumber,
+        columnNumber,
+        scriptCode,
+      );
     }
     const { source, line, column } = map.getOriginalPosition(
       lineNumber,
@@ -55,7 +64,7 @@ async function map(
       fileName,
       lineNumber,
       columnNumber,
-      getLinesAround(lineNumber, contextLines, fileSource),
+      scriptCode,
       functionName,
       source,
       line,

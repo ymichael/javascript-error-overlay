@@ -21,7 +21,10 @@ import {
 import {
   permanentRegister as permanentRegisterConsole,
 } from './effects/proxyConsole';
-import getStackFrames from './utils/getStackFrames';
+import {
+  getStackFrames,
+  getStackFramesFast,
+}from './utils/getStackFrames';
 
 import type { StackFrame } from './utils/stack-frame';
 
@@ -39,18 +42,27 @@ export function listenToRuntimeErrors(
   filename: string = '/static/js/bundle.js'
 ) {
   function crashWithFrames(error: Error, unhandledRejection = false) {
-    getStackFrames(error, unhandledRejection, CONTEXT_SIZE)
-      .then(stackFrames => {
-        if (stackFrames == null) {
-          return;
-        }
-        crash({
-          error,
-          unhandledRejection,
-          contextSize: CONTEXT_SIZE,
-          stackFrames,
-        });
+    const _crashInner = function(stackFrames) {
+      if (stackFrames == null) {
+        return;
+      }
+      crash({
+        error,
+        unhandledRejection,
+        contextSize: CONTEXT_SIZE,
+        stackFrames,
+      });
+    };
+    getStackFramesFast(error)
+      .then(_crashInner)
+      .then(() => {
+        return getStackFrames(error, CONTEXT_SIZE, true /* skipSourceMap */)
       })
+      .then(_crashInner)
+      .then(() => {
+        return getStackFrames(error, CONTEXT_SIZE, false /* skipSourceMap */)
+      })
+      .then(_crashInner)
       .catch(e => {
         console.log('Could not get the stack frames of error:', e);
       });

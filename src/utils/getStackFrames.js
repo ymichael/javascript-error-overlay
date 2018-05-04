@@ -10,28 +10,27 @@ import type { StackFrame } from './stack-frame';
 import { parse } from './parser';
 import { map } from './mapper';
 
+function getStackFramesFast(error: Error): Promise<StackFrame[] | null> {
+  return Promise.resolve(parse(error));
+}
+
 function getStackFrames(
   error: Error,
-  unhandledRejection: boolean = false,
-  contextSize: number = 3
+  contextSize: number = 3,
+  skipSourceMap: boolean = false,
 ): Promise<StackFrame[] | null> {
-  const parsedFrames = parse(error);
-  const enhancedFramesPromise = map(parsedFrames, contextSize);
-  return enhancedFramesPromise.then(enhancedFrames => {
-    if (
-      enhancedFrames
-        .map(f => f._originalFileName)
-        .filter(f => f != null && f.indexOf('node_modules') === -1).length === 0
-    ) {
-      return null;
-    }
-    return enhancedFrames.filter(
-      ({ functionName }) =>
-        functionName == null ||
-        functionName.indexOf('__stack_frame_overlay_proxy_console__') === -1
-    );
+  return getStackFramesFast(error)
+    .then(bareFrames => {
+      return map(bareFrames, contextSize, skipSourceMap);
+    })
+    .then(enhancedFrames => {
+      return enhancedFrames.filter(
+        ({ functionName }) =>
+          functionName == null ||
+          functionName.indexOf('__stack_frame_overlay_proxy_console__') === -1
+      );
   });
 }
 
 export default getStackFrames;
-export { getStackFrames };
+export { getStackFrames, getStackFramesFast };

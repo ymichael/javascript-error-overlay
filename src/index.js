@@ -76,14 +76,17 @@ export function startReportingRuntimeErrors(options: RuntimeReportingOptions) {
 }
 
 function handleRuntimeError(errorRecord) {
-  if (
-    currentRuntimeErrorRecords.some(({ error }) => error === errorRecord.error)
-  ) {
-    // Deduplicate identical errors.
-    // This fixes https://github.com/facebook/create-react-app/issues/3011.
-    return;
+  let isExistingError = false;
+  currentRuntimeErrorRecords = currentRuntimeErrorRecords.map(existingRecord => {
+    if (existingRecord.error === errorRecord.error) {
+      isExistingError = true;
+      return errorRecord;
+    }
+    return existingRecord;
+  });
+  if (!isExistingError) {
+    currentRuntimeErrorRecords = currentRuntimeErrorRecords.concat([errorRecord]);
   }
-  currentRuntimeErrorRecords = currentRuntimeErrorRecords.concat([errorRecord]);
   update();
 }
 
