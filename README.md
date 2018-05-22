@@ -16,10 +16,9 @@ errorOverlay.startReportingRuntimeErrors();
 
 ```
 errorOverlay.startReportingRuntimeErrors({
-	shouldIgnoreError: function(e) {
-		...
-	}
-}
+    shouldIgnoreError: function(e) {
+        ...
+    }
 });
 ```
 
