@@ -20,6 +20,7 @@ import type { ErrorLocation } from './utils/parseCompileError';
 
 type RuntimeReportingOptions = {|
   onError: () => void,
+  shouldIgnoreError: () => boolean,
 |};
 
 type EditorHandler = (errorLoc: ErrorLocation) => void;
@@ -70,7 +71,10 @@ export function startReportingRuntimeErrors(options: RuntimeReportingOptions) {
         options.onError.call(null);
       }
     } finally {
-      handleRuntimeError(errorRecord);
+      if (typeof options.shouldIgnoreError !== 'function' ||
+            !options.shouldIgnoreError(errorRecord.error)) {
+        handleRuntimeError(errorRecord);
+      }
     }
   });
 }

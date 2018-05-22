@@ -12,6 +12,16 @@ A generic overlay that displays JavaScript errors on the page - heavily adapted/
 var errorOverlay = require('javascript-error-overlay');
 errorOverlay.startReportingRuntimeErrors();
 ```
+### Configuration Options
+
+```
+errorOverlay.startReportingRuntimeErrors({
+	shouldIgnoreError: function(e) {
+		...
+	}
+}
+});
+```
 
 ## Development
 
